@@ -6,7 +6,7 @@ namespace CopyDirectory.UI
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main()
         {
             var fileCopier = new FileCopier(new ConsoleLogger());
 
@@ -15,11 +15,14 @@ namespace CopyDirectory.UI
 
             try
             {
-                await fileCopier.CopyDirectoryAsync(sourcePath, targetPath);
+                // Normally I would use a third-party async library such as Nito.AsyncEx to properly unwrap any
+                // exceptions thrown by the async method but haven't done this due to time constraints and not
+                // knowing if there is a library compatible with dotnet core. 
+                Task.Run(() => fileCopier.CopyDirectoryAsync(sourcePath, targetPath)).Wait();
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Console.WriteLine(ex);
+                Console.WriteLine(e);
             }
         }
     }
